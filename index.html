@@ -1,135 +1,231 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css"
-    />
 
-    <link rel="stylesheet" href="./css/calculator.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" />
 
-  <body>
-    <div class="all">
-      <div class="top">
-        <i class="fa-solid fa-calculator"></i>
-        計算機
-        <div class="box">
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-        </div>
-      </div>
-      <div class="main">0</div>
-      <div class="btm">
-        <div class="btn-area">
-          <button type="button" class="del clear">AC</button>
-          <button type="button">
-            <i class="fa-solid fa-delete-left"></i>
-          </button>
-          <button type="button" class="percent">%</button>
-          <button type="button" class="operator symbol" data-symbol="/">
-            ÷
-          </button>
-          <button type="button" class="num" data-num="7">7</button>
-          <button type="button" class="num" data-num="8">8</button>
-          <button type="button" class="num" data-num="9">9</button>
-          <button type="button" class="operator symbol" data-symbol="*">
-            *
-          </button>
-          <button type="button" class="num" data-num="4">4</button>
-          <button type="button" class="num" data-num="5">5</button>
-          <button type="button" class="num" data-num="6">6</button>
-          <button type="button" class="operator symbol" data-symbol="-">
-            -
-          </button>
-          <button type="button" class="num" data-num="1">1</button>
-          <button type="button" class="num" data-num="2">2</button>
-          <button type="button" class="num" data-num="3">3</button>
-          <button type="button" class="operator symbol" data-symbol="+">
-            +
-          </button>
-          <button type="button">
-            <i class="fa-solid fa-plus-minus"></i>
-          </button>
-          <button type="button" class="num" data-num="0">0</button>
-          <button type="button">.</button>
-          <button type="button" class="equal">=</button>
-        </div>
+  <link rel="stylesheet" href="./css/calculator.css" />
+</head>
+
+<body>
+  <div class="all">
+    <div class="top">
+      <i class="fa-solid fa-calculator"></i>
+      計算機
+      <div class="box">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
       </div>
     </div>
-    <script>
-      let num_temp = '';
-      let num_01 = '';
-      let num_symbol = '';
-      let total = 0;
-      const main = document.querySelector('.main');
-      const btns = document.querySelectorAll('.num');
-      console.log(btns);
+    <div class="main">0</div>
+    <div class="btm">
+      <div class="btn-area">
+        <button type="button" class="del clear">AC</button>
+        <button type="button" class="backspace">
+          <i class="fa-solid fa-delete-left"></i>
+        </button>
+        <button type="button" class="percent">%</button>
+        <button type="button" class="operator symbol" data-symbol="/">
+          ÷
+        </button>
+        <button type="button" class="num" data-num="7">7</button>
+        <button type="button" class="num" data-num="8">8</button>
+        <button type="button" class="num" data-num="9">9</button>
+        <button type="button" class="operator symbol" data-symbol="*">
+          *
+        </button>
+        <button type="button" class="num" data-num="4">4</button>
+        <button type="button" class="num" data-num="5">5</button>
+        <button type="button" class="num" data-num="6">6</button>
+        <button type="button" class="operator symbol" data-symbol="-">
+          -
+        </button>
+        <button type="button" class="num" data-num="1">1</button>
+        <button type="button" class="num" data-num="2">2</button>
+        <button type="button" class="num" data-num="3">3</button>
+        <button type="button" class="operator symbol" data-symbol="+">
+          +
+        </button>
+        <button type="button" class="plus-minus">
+          <i class="fa-solid fa-plus-minus"></i>
+        </button>
+        <button type="button" class="num" data-num="0">0</button>
+        <button type="button" class="dot">.</button>
+        <button type="button" class="equal">=</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    let num_temp = '';
+    let num_01 = '';
+    let num_symbol = '';
+    let total = 0;
+    let justEqual = false;
 
-      for (let i = 0; i < btns.length; i++) {
-        btns[i].addEventListener('click', function () {
-          num_temp = num_temp + btns[i].dataset.num;
-          main.textContent = num_temp;
-        });
+    const main = document.querySelector('.main');
+    function showNumber(number) {
+      main.textContent = number;
+    }
+
+    function clearAll() {
+      num_temp = '';
+      num_01 = '';
+      num_symbol = '';
+      total = 0;
+      justEqual = false;
+      showNumber('0');
+    }
+
+    function cleanNumber(number) {
+      let result = Number(number);
+      result = Number(result.toPrecision(12));
+      return String(result);
+    }
+
+    function calculate() {
+      if (num_symbol === '/') {
+        if (Number(num_temp) === 0) {
+          clearAll();
+          showNumber('不能除以0');
+          return false;
+        }
       }
 
-      const symbol = document.querySelectorAll('.symbol');
-      for (let i = 0; i < symbol.length; i++) {
-        symbol[i].addEventListener('click', function () {
-          if (num_temp != '') {
-            num_01 = num_temp;
-            num_symbol = symbol[i].dataset.symbol;
-            num_temp = '';
-            main.textContent = symbol[i].dataset.symbol;
-          }
-        });
+      if (num_symbol === '+') {
+        total = Number(num_01) + Number(num_temp);
       }
-      const equal = document.querySelector('.equal');
-      equal.addEventListener('click', function () {
-        if (num_01 != '' && num_temp != '') {
-          if (num_symbol === '+') {
-            total = Number(num_01) + Number(num_temp);
-          }
-          if (num_symbol === '-') {
-            total = Number(num_01) - Number(num_temp);
-          }
-          if (num_symbol === '*') {
-            total = Number(num_01) * Number(num_temp);
-          }
-          if (num_symbol === '/') {
-            if (Number(num_temp) === 0) {
-              main.textContent = '不能除以0';
-              num_temp = '';
-              num_01 = '';
-              num_symbol = '';
+      if (num_symbol === '-') {
+        total = Number(num_01) - Number(num_temp);
+      }
+      if (num_symbol === '*') {
+        total = Number(num_01) * Number(num_temp);
+      }
+      if (num_symbol === '/') {
+        total = Number(num_01) / Number(num_temp);
+      }
+      total = cleanNumber(total);
+      return true;
+    }
+
+    const btns = document.querySelectorAll('.num');
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        if (justEqual === true) {
+          clearAll();
+        }
+
+        let digit = btns[i].dataset.num;
+        if (num_temp === '0') {
+          num_temp = digit;
+        } else if (num_temp === '-0') {
+          num_temp = '-' + digit;
+        } else {
+          num_temp = num_temp + digit;
+        }
+        showNumber(num_temp);
+      });
+    }
+
+    const symbol = document.querySelectorAll('.symbol');
+    for (let i = 0; i < symbol.length; i++) {
+      symbol[i].addEventListener('click', function () {
+        let nextSymbol = symbol[i].dataset.symbol;
+
+        if (num_temp !== '') {
+          if (num_01 !== '' && num_symbol !== '') {
+            if (calculate() === false) {
               return;
             }
-            total = Number(num_01) / Number(num_temp);
+            num_01 = total;
+          } else {
+            num_01 = num_temp;
           }
-          main.textContent = total;
+          num_temp = '';
+          showNumber(num_01);
+        }
+        if (num_01 !== '') {
+          num_symbol = nextSymbol;
+          justEqual = false;
         }
       });
+    }
 
-      const percent = document.querySelector('.percent');
-      percent.addEventListener('click', function () {
-        if (num_temp != '') {
-          num_temp = String(Number(num_temp / 100));
-          main.textContent = num_temp;
+    const equal = document.querySelector('.equal');
+    equal.addEventListener('click', function () {
+      if (num_temp !== '' && num_01 !== '' && num_symbol !== '') {
+        if (calculate() === false) {
+          return;
         }
-      });
-      
-      const clear = document.querySelector('.clear');
-      clear.addEventListener('click', function () {
-        num_temp = '';
+        showNumber(total);
+        num_temp = String(total);
         num_01 = '';
         num_symbol = '';
-        total = 0;
-        main.textContent = '0';
-      });
-    </script>
-  </body>
+        justEqual = true;
+      }
+    });
+
+    const percent = document.querySelector('.percent');
+    percent.addEventListener('click', function () {
+      if (num_temp !== '') {
+        num_temp = String(Number(num_temp) / 100);
+        showNumber(num_temp);
+      }
+    });
+
+    const plusMinus = document.querySelector('.plus-minus');
+    plusMinus.addEventListener('click', function () {
+      if (num_temp === '') {
+        num_temp = '-0';
+      } else if (num_temp === '0') {
+        num_temp = '-0';
+      } else if (num_temp === '-0') {
+        num_temp = '0';
+      } else {
+        num_temp = String(Number(num_temp) * -1);
+      }
+      justEqual = false;
+      showNumber(num_temp);
+    });
+
+    const dot = document.querySelector('.dot');
+    dot.addEventListener('click', function () {
+      if (justEqual === true) {
+        clearAll();
+      }
+      if (num_temp.includes('.') === false) {
+        if (num_temp === '') {
+          num_temp = '0.';
+        } else {
+          num_temp = num_temp + '.';
+        }
+        showNumber(num_temp);
+      }
+    });
+
+    const backspace = document.querySelector('.backspace');
+    backspace.addEventListener('click', function () {
+      if (justEqual === true) {
+        clearAll();
+      }
+      if (num_temp !== '') {
+        num_temp = num_temp.slice(0, -1);
+        if (num_temp === '' || num_temp === '-') {
+          num_temp = '0';
+        }
+      }
+      showNumber(num_temp);
+    });
+
+    const clear = document.querySelector('.clear');
+    clear.addEventListener('click', function () {
+      clearAll();
+    });
+
+  </script>
+</body>
+
 </html>
